@@ -21,6 +21,7 @@ LOG_PATH = Path("__main__.log")
 LOG_FORMAT = "%(asctime)s : %(levelname)s : %(message)s"
 LOGGER = getLogger(__name__)
 MIN_RELEVANT_SCORE = 2
+POSITIONS_ALL_PATH = Path("positions.pkl.gz")
 ROOT_LOGGER = getLogger()
 SAMPLING_FREQUENCY = 1000
 
@@ -103,6 +104,11 @@ def main():
             are specified, the estimators file will be loaded.
         """)
     parser.add_argument(
+        "--positions", type=Path, default=POSITIONS_ALL_PATH, help="""
+            The path to the file, where the estimated positions of all paragraph identifiers from
+            all datasets will be stored. Defaults to %(default)s.
+        """)
+    parser.add_argument(
         "--estimators", type=Path, default=ESTIMATORS_PATH, help="""
             The path to the file, where the density, and probability estimators will be stored. When
             no datasets are specified, this file will be loaded to provide the estimators for
@@ -127,6 +133,8 @@ def main():
                 "Relevance judgement %s does not exist" % judgement_path
         assert not args.estimators.exists() or args.estimators.is_file(), \
             "File %s, where estimators are to be stored, is non-regular." % args.estimators
+        if args.positions.exists():
+            LOGGER.warning("%s exists", args.positions.name)
         if args.estimators.exists():
             LOGGER.warning("%s exists", args.estimators.name)
     if args.plots:
@@ -141,6 +149,9 @@ def main():
                 args.estimators.parents[0]
             if plot.exists():
                 LOGGER.warning("%s exists", plot)
+    assert args.positions.parents[0].exists() and args.positions.parents[0].is_dir(), \
+        "Directory %s, where the positions are to be stored, does not exist" % \
+        args.estimators.parents[0]
     assert args.estimators.parents[0].exists() and args.estimators.parents[0].is_dir(), \
         "Directory %s, where the estimators are to be stored, does not exist" % \
         args.estimators.parents[0]
@@ -184,13 +195,16 @@ def main():
                 len(identifiers_relevant[dataset.path]), len(identifiers_judged[dataset.path]),
                 len(identifiers_all[dataset.path]), dataset.path.name)
 
+        LOGGER.info("Pickling %s", args.positions.name)
+        with gzip.open(args.positions.open("wb"), "wb") as f:
+            pickle.dump(positions_all, f)
+
         LOGGER.info("Fitting density, and probability estimators")
         estimators = get_estimators(positions_all, positions_relevant)
 
-        if args.estimators:
-            LOGGER.info("Pickling %s", args.estimators.name)
-            with gzip.open(args.estimators.open("wb"), "wb") as f:
-                pickle.dump(estimators, f)
+        LOGGER.info("Pickling %s", args.estimators.name)
+        with gzip.open(args.estimators.open("wb"), "wb") as f:
+            pickle.dump(estimators, f)
     else:
         LOGGER.info("Unpickling %s", args.estimators.name)
         with gzip.open(args.estimators.open("rb"), "rb") as f:
