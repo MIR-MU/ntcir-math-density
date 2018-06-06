@@ -1,5 +1,5 @@
 # Introduction
-NTCIR Math density Estimator is a Python 3 command-line utility that computes
+NTCIR Math Density Estimator is a Python 3 command-line utility that computes
 and plots density, and probability estimators from judged datasets in the
 [NTCIR-11 Math-2][paper:aizawaetal14-ntcir11], and [NTCIR-12
 MathIR][paper:zanibbi16-ntcir12] format. Most importantly, the package
