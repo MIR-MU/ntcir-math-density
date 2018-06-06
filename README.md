@@ -23,8 +23,9 @@ Displaying the usage:
 
     $ ntcir-math-density --help
     usage: ntcir-math-density  [-h] --datasets DATASETS [DATASETS ...]
-                       --judgements JUDGEMENTS [JUDGEMENTS ...] [--output-file
-                       OUTPUT_FILE] [--num-workers NUM_WORKERS]
+                               --judgements JUDGEMENTS [JUDGEMENTS ...]
+                               [--output-file OUTPUT_FILE] [--num-workers
+                               NUM_WORKERS]
 
     Use NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12 MathIR datasets to compute
     density, and probability estimators.
