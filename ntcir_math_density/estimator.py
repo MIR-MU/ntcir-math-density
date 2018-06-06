@@ -78,7 +78,7 @@ def get_all_identifiers(dataset):
         yield (directory, identifier)
 
 
-def get_paragraph_number(directory, identifier):
+def get_paragraph_number(identifier):
     """
     Extracts the number of a paragraph from the identifier, and the parent directory of the
     paragraph.
@@ -96,10 +96,7 @@ def get_paragraph_number(directory, identifier):
         The number of the paragraph.
     """
     paragraph_number = int(identifier.split('_')[-1])
-    if Path("/var/tmp/xnovot32/ntcir-10-converted.ro-snapshot") in directory.parents or \
-            Path("/mnt/storage/ntcir-10-converted.ro-snapshot") in directory.parents:
-        paragraph_number = paragraph_number + 1  # Fixes a bug in ntcir10-math-converter 0.1.4, TODO: Remove me, and the directory parameter.
-    assert paragraph_number > 0  # TODO: Remove me (see above)
+    assert paragraph_number > 0
     return paragraph_number
 
 
@@ -120,9 +117,9 @@ def get_position(directory, identifier):
     float
         The estimated position of the paragraph in the range [0; 1].
     """
-    paragraph_number = get_paragraph_number(directory, identifier)
+    paragraph_number = get_paragraph_number(identifier)
     paragraph_total = max(  # Not all paragraphs are stored, e.g. because of processing errors.
-        get_paragraph_number(directory, get_identifier(document))
+        get_paragraph_number(get_identifier(document))
         for document in directory.iterdir())
     assert paragraph_total >= paragraph_number and paragraph_total > 0
     position = paragraph_number / paragraph_total
