@@ -189,7 +189,11 @@ def main():
 
         LOGGER.info("Pickling %s", args.positions.name)
         with gzip.open(args.positions.open("wb"), "wb") as f:
-            pickle.dump(positions_all, f)
+            pickle.dump({
+                dataset.path: {
+                    identifier: position for position, (_, identifier)
+                    in zip(positions_all[dataset.path], identifiers_all[dataset.path])
+                } for dataset in args.datasets}, f)
 
         LOGGER.info("Fitting density, and probability estimators")
         estimators = get_estimators(positions_all, positions_relevant)
