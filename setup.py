@@ -36,6 +36,7 @@ setup(
         "matplotlib ~= 2.2.2",
         "numpy ~= 1.14.3",
         "scikit-learn ~= 0.19.1",
+        "scipy ~= 1.1.0",
         "tqdm ~= 4.23.3",
     ],
     license="MIT",
