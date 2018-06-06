@@ -1,10 +1,10 @@
 # Introduction
 NTCIR Math density Estimator is a Python 3 command-line utility that computes
-density, and probability estimators from judged datasets in the [NTCIR-11
-Math-2][paper:aizawaetal14-ntcir11], and [NTCIR-12
-MathIR][paper:zanibbi16-ntcir12] format. Most importantly, the probability
-`P(relevant | position)`, where `position` is a position of a paragraph in a
-document, can be estimated.
+and plots density, and probability estimators from judged datasets in the
+[NTCIR-11 Math-2][paper:aizawaetal14-ntcir11], and [NTCIR-12
+MathIR][paper:zanibbi16-ntcir12] format. Most importantly, the package
+estimates the probability `P(relevant | position)`, where `position` is a
+position of a paragraph in a document.
 
 [paper:aizawaetal13-ntcir10]: https://ntcir-math.nii.ac.jp/wp-content/blogs.dir/23/files/2013/10/01-NTCIR10-OV-MATH-AizawaA.pdf (NTCIR-10 Math Pilot Task Overview, Proceedings of the 10th NTCIR Conference, June 18–21, 2013, Tokyo, Japan)
 [paper:aizawaetal14-ntcir11]: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.686.444&rep=rep1&type=pdf (NTCIR-11 Math-2 Task Overview, Proceedings of the 11th NTCIR Conference, December 9–12, 2014, Tokyo, Japan)
