@@ -3,10 +3,10 @@ These are the estimator functions for the NTCIR Math density estimator package.
 """
 
 from logging import getLogger
-from math import log
 from multiprocessing import Pool
 from pathlib import Path
 
+from numpy import array_split, concatenate, log, exp
 from sklearn.neighbors import KernelDensity
 from tqdm import tqdm
 
@@ -174,16 +174,61 @@ def get_estimators(positions_all, positions_relevant):
     Returns
     -------
     (float, KernelDensity, KernelDensity)
-        An estimate of the prior probability P(relevant), an estimator of the prior density
-        p(position), and an estimator of the conditional density p(position | relevant).
+        An estimate of P(relevant), and estimators of p(position), and p(position | relevant).
     """
     samples_all = [
         (position,) for _, positions in positions_all.items() for position in positions]
     samples_relevant = [
         (position,) for _, positions in positions_relevant.items() for position in positions]
-    prior_relevant = len(samples_relevant) / len(samples_all)
+    estimators = dict()
+    estimators["P(relevant)"] = len(samples_relevant) / len(samples_all)
     LOGGER.info("Fitting prior p(position) density estimator")
-    prior_position = KernelDensity(**KERNEL).fit(samples_all)
+    estimators["p(position)"] = KernelDensity(**KERNEL).fit(samples_all)
     LOGGER.info("Fitting conditional p(position | relevant) density estimator")
-    conditional = KernelDensity(**KERNEL).fit(samples_relevant)
-    return (prior_relevant, prior_position, conditional)
+    estimators["p(position|relevant)"] = KernelDensity(**KERNEL).fit(samples_relevant)
+    return (
+        estimators["P(relevant)"], estimators["p(position)"], estimators["p(position|relevant)"])
+
+
+def get_estimates(estimators_tuple, positions, num_workers=1):
+    """
+    Estimates densities, and probabilities for paragraph positions.
+
+    Parameters
+    ----------
+    estimators_tuple : (float, KernelDensity, KernelDensity)
+        An estimate of the prior probability P(relevant), an estimator of the prior density
+        p(position), and an estimator of the conditional density p(position | relevant).
+    positions : iterable of float
+        Paragraph positions for which densities, and probabilities will be estimated.
+    num_workers : int, optional
+        The number of processes that will compute the estimates.
+
+    Returns
+    -------
+    six-tuple of (sequence of float)
+        Estimates of P(relevant), p(position), p(position | relevant), P(position, relevant), and
+        P(relevant | position).
+    """
+    estimators = dict()
+    estimators["P(relevant)"], estimators["p(position)"], \
+        estimators["p(position|relevant)"] = estimators_tuple
+
+    log_estimates = dict()
+    log_estimates["P(relevant)"] = log(estimators["P(relevant)"])
+    X = [(position,) for position in positions]
+    with Pool(num_workers) as pool:
+        first_job = pool.map_async(estimators["p(position)"].score_samples, tqdm(
+            array_split(X, num_workers), desc="p(position)"))
+        second_job = pool.map_async(estimators["p(position|relevant)"].score_samples, tqdm(
+            array_split(X, num_workers), desc="p(position|relevant)"))
+        log_estimates["p(position)"] = concatenate(first_job.get())
+        log_estimates["p(position|relevant)"] = concatenate(second_job.get())
+    log_estimates["P(position,relevant)"] = \
+        log_estimates["p(position|relevant)"] + log_estimates["P(relevant)"]
+    log_estimates["P(relevant|position)"] = \
+        log_estimates["P(position,relevant)"] - log_estimates["p(position)"]
+    return (
+        [estimators["P(relevant)"]] * len(X), exp(log_estimates["p(position)"]),
+        exp(log_estimates["p(position|relevant)"]), exp(log_estimates["P(position,relevant)"]),
+        exp(log_estimates["P(relevant|position)"]))

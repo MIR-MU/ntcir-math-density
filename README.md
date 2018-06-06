@@ -22,23 +22,23 @@ Installing:
 Displaying the usage:
 
     $ ntcir-math-density --help
-    usage: ntcir-math-density  [-h] --datasets DATASETS [DATASETS ...]
-                               --judgements JUDGEMENTS [JUDGEMENTS ...]
-                               [--output-file OUTPUT_FILE] [--num-workers
-                               NUM_WORKERS]
+    usage: ntcir-math-density [-h] [--datasets DATASETS [DATASETS ...]]
+                              [--judgements JUDGEMENTS [JUDGEMENTS ...]]
+                              [--plots PLOTS [PLOTS ...]] [--estimators ESTIMATORS]
+                              [--num-workers NUM_WORKERS]
 
     Use NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12 MathIR datasets to compute
     density, and probability estimators.
 
     optional arguments:
-      -h, --help            show this help message and exit
-      --datasets DATASETS [DATASETS ...]
+    -h, --help            show this help message and exit
+    --datasets DATASETS [DATASETS ...]
                             Paths to the directories containing the datasets. Each
                             path must be prefixed with a unique single-letter
                             label (e.g. "A=/some/path"). Note that all the
                             datasets must be in the NTCIR-11 Math-2, and NTCIR-12
                             MathIR format, even the NTCIR-10 Math dataset.
-      --judgements JUDGEMENTS [JUDGEMENTS ...]
+    --judgements JUDGEMENTS [JUDGEMENTS ...]
                             Paths to the files containing relevance judgements.
                             Each path must be prefixed with single-letter labels
                             corresponding to the judged datasets (e.g.
@@ -46,22 +46,30 @@ Displaying the usage:
                             judgements must be in the NTCIR-11 Math-2, and
                             NTCIR-12 MathIR format, even the NTCIR-10 Math dataset
                             judgements.
-      --output-file OUTPUT_FILE
-                            The path to the file, where the probability estimators
-                            will be pickled, and gzipped. Defaults to
+    --plots PLOTS [PLOTS ...]
+                            The path to the files, where the probability
+                            estimators will plotted. When no datasets are
+                            specified, the estimators file will be loaded.
+    --estimators ESTIMATORS
+                            The path to the file, where the density, and
+                            probability estimators will be stored. When no
+                            datasets are specified, this file will be loaded to
+                            provide the estimators for plotting. Defaults to
                             estimators.pkl.gz.
-      --num-workers NUM_WORKERS
+    --num-workers NUM_WORKERS
                             The number of processes that will be used for
-                            processing the NTCIR-10 Math dataset. Defaults to 1.
+                            processing the NTCIR-10 Math dataset, and for
+                            computing the density, and probability estimates.
+                            Defaults to 1.
 
-Extracting density, and probability estimators using 64 worker processes:
+Extracting density, and probability estimators, and plotting the estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
     >     --datasets A=ntcir-10-converted B=ntcir-11-12 \
     >     --judgements A:NTCIR_10_Math-qrels_fs-converted.dat A:NTCIR_10_Math-qrels_ft-converted.dat \
     >                  B:NTCIR11_Math-qrels.dat B:NTCIR12_Math-qrels_agg.dat \
     >                  B:NTCIR12_Math_simto-qrels_agg.dat \
-    >     --output-file estimators.pkl.gz
+    >     --estimators estimators.pkl.gz --plots plot.pdf plot.svg
     Retrieving judged paragraph identifiers, and scores from NTCIR_10_Math-qrels_fs-converted.dat
     100%|█████████████████████████████████████████████████████| 2129/2129 [00:00<00:00, 334959.05it/s]
     Retrieving judged paragraph identifiers, and scores from NTCIR_10_Math-qrels_ft-converted.dat
@@ -84,3 +92,50 @@ Extracting density, and probability estimators using 64 worker processes:
     Fitting prior p(position) density estimator
     Fitting conditional p(position | relevant) density estimator
     Pickling estimators.pkl.gz
+    Computing density, and probability estimates for a plot
+    p(position): 100%|████████████████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
+    p(position|relevant): 100%|███████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
+    Plotting plot.svg
+    Plotting plot.pdf
+
+Extracting density, and probability estimators using 64 worker processes:
+
+    $ ntcir-math-density --num-workers 64 \
+    >     --datasets A=ntcir-10-converted B=ntcir-11-12 \
+    >     --judgements A:NTCIR_10_Math-qrels_fs-converted.dat A:NTCIR_10_Math-qrels_ft-converted.dat \
+    >                  B:NTCIR11_Math-qrels.dat B:NTCIR12_Math-qrels_agg.dat \
+    >                  B:NTCIR12_Math_simto-qrels_agg.dat \
+    >     --estimators estimators.pkl.gz
+    Retrieving judged paragraph identifiers, and scores from NTCIR_10_Math-qrels_fs-converted.dat
+    100%|█████████████████████████████████████████████████████| 2129/2129 [00:00<00:00, 334959.05it/s]
+    Retrieving judged paragraph identifiers, and scores from NTCIR_10_Math-qrels_ft-converted.dat
+    100%|█████████████████████████████████████████████████████| 1425/1425 [00:00<00:00, 353201.94it/s]
+    Retrieving judged paragraph identifiers, and scores from NTCIR11_Math-qrels.dat
+    100%|█████████████████████████████████████████████████████| 2500/2500 [00:00<00:00, 343345.12it/s]
+    Retrieving judged paragraph identifiers, and scores from NTCIR12_Math-qrels_agg.dat
+    100%|█████████████████████████████████████████████████████| 4251/4251 [00:00<00:00, 342252.50it/s]
+    Retrieving judged paragraph identifiers, and scores from NTCIR12_Math_simto-qrels_agg.dat
+    100%|█████████████████████████████████████████████████████| 654/654 [00:00<00:00, 314428.57it/s]
+    Retrieving all paragraph identifiers, and positions from ntcir-10-converted
+    get_all_identifiers(ntcir-10-converted): 5405167it [04:30, 19946.57it/s]
+    get_all_positions(ntcir-10-converted): 100%|█████████| 5405167/5405167 [08:44<00:00, 10306.72it/s]
+    Retrieving all paragraph identifiers, and positions from ntcir-11-12
+    get_all_identifiers(ntcir-11-12): 8301578it [08:08, 16985.19it/s]
+    get_all_positions(ntcir-11-12): 100%|█████████████████| 8301578/8301578 [44:30<00:00, 3108.88it/s]
+    1043 / 3146 / 5405167 relevant / judged / total identifiers in dataset ntcir-10-converted
+    1742 / 7059 / 8301578 relevant / judged / total identifiers in dataset ntcir-11-12
+    Fitting density, and probability estimators
+    Fitting prior p(position) density estimator
+    Fitting conditional p(position | relevant) density estimator
+    Pickling estimators.pkl.gz
+
+Plotting the estimates using 64 worker processes:
+
+    $ ntcir-math-density --num-workers 64 \
+    >     --estimators estimators.pkl.gz --plots plot.pdf plot.svg
+    Unpickling estimators.pkl.gz
+    Computing density, and probability estimates for a plot
+    p(position): 100%|████████████████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
+    p(position|relevant): 100%|███████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
+    Plotting plot.svg
+    Plotting plot.pdf
