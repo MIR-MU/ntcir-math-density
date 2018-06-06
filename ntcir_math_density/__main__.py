@@ -84,6 +84,12 @@ def main():
             the NTCIR-11 Math-2, and NTCIR-12 MathIR format, even the NTCIR-10 Math dataset.
         """)
     parser.add_argument(
+        "--ntcir-10-dataset", required=False, type=lambda s: LabelledPath.labels[s], help="""
+            The single-letter label of the NTCIR-10 Math dataset converted to the NTCIR-11 Math-2,
+            and the NTCIR-12 MathIR format. Each path must be prefixed with a unique single-letter
+            label (e.g. "A=/some/path").
+        """)
+    parser.add_argument(
         "--judgements", nargs='+', required=False,
         type=lambda s: (LabelledPath.labels[s.split(':', 1)[0]], Path(s.split(':', 1)[1])), help="""
             Paths to the files containing relevance judgements. Each path must be prefixed with
@@ -111,6 +117,7 @@ def main():
 
     LOGGER.debug("Performing sanity checks on the command-line arguments")
     if args.datasets:
+        assert args.ntcir_10_dataset, "The path to the NTCIR-10 Math dataset must be specified"
         for dataset in args.datasets:
             assert dataset.path.exists() and dataset.path.is_dir(), \
                 "Dataset %s does not exist" % dataset.path
@@ -164,7 +171,8 @@ def main():
             identifiers_all[dataset.path] = []
             positions_all[dataset.path] = []
             positions_relevant[dataset.path] = []
-            for directory, identifier, position in get_all_positions(dataset.path, args.num_workers):
+            for directory, identifier, position in get_all_positions(
+                    dataset.path, args.ntcir_10_dataset, args.num_workers):
                 identifiers_all[dataset.path].append((directory, identifier))
                 positions_all[dataset.path].append(position)
                 if identifier in identifiers_relevant[dataset.path]:

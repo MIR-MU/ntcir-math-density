@@ -78,7 +78,7 @@ def get_all_identifiers(dataset):
         yield (directory, identifier)
 
 
-def get_paragraph_number(directory, identifier):
+def get_paragraph_number(directory, identifier, ntcir_10_dataset):
     """
     Extracts the number of a paragraph from the identifier, and the parent directory of the
     paragraph.
@@ -89,6 +89,9 @@ def get_paragraph_number(directory, identifier):
         A parent directory of a paragraph.
     identifier : str
         An identifier of a paragraph.
+    ntcir_10_dataset : Path
+        The path of the NTCIR-10 Math dataset converted to the NTCIR-11 Math-2, and NTCIR-12 MathIR
+        format.
 
     Returns
     -------
@@ -96,14 +99,13 @@ def get_paragraph_number(directory, identifier):
         The number of the paragraph.
     """
     paragraph_number = int(identifier.split('_')[-1])
-    if Path("/var/tmp/xnovot32/ntcir-10-converted.ro-snapshot") in directory.parents or \
-            Path("/mnt/storage/ntcir-10-converted.ro-snapshot") in directory.parents:
+    if ntcir_10_dataset in directory.parents:  # Fixes a bug in ntcir10-math-converter 0.1.4, TODO: Remove me, and the ntcir_10_dataset parameter.
         paragraph_number = paragraph_number + 1  # Fixes a bug in ntcir10-math-converter 0.1.4, TODO: Remove me, and the directory parameter.
-    assert paragraph_number > 0  # TODO: Remove me (see above)
+    assert paragraph_number > 0
     return paragraph_number
 
 
-def get_position(directory, identifier):
+def get_position(directory, identifier, ntcir_10_dataset):
     """
     Extracts the position of a paragraph from the identifier, and the parent directory of the
     paragraph.
@@ -114,15 +116,18 @@ def get_position(directory, identifier):
         A parent directory of a paragraph.
     identifier : str
         An identifier of a paragraph.
+    ntcir_10_dataset : Path
+        The path of the NTCIR-10 Math dataset converted to the NTCIR-11 Math-2, and NTCIR-12 MathIR
+        format.
 
     Returns
     -------
     float
         The estimated position of the paragraph in the range [0; 1].
     """
-    paragraph_number = get_paragraph_number(directory, identifier)
+    paragraph_number = get_paragraph_number(directory, identifier, ntcir_10_dataset)
     paragraph_total = max(  # Not all paragraphs are stored, e.g. because of processing errors.
-        get_paragraph_number(directory, get_identifier(document))
+        get_paragraph_number(directory, get_identifier(document), ntcir_10_dataset)
         for document in directory.iterdir())
     assert paragraph_total >= paragraph_number and paragraph_total > 0
     position = paragraph_number / paragraph_total
@@ -130,11 +135,11 @@ def get_position(directory, identifier):
 
 
 def _get_position_worker(args):
-    directory, identifier = args
-    return (directory, identifier, get_position(directory, identifier))
+    directory, identifier, ntcir_10_dataset = args
+    return (directory, identifier, get_position(directory, identifier, ntcir_10_dataset))
 
 
-def get_all_positions(dataset, num_workers=1):
+def get_all_positions(dataset, ntcir_10_dataset, num_workers=1):
     """
     Extracts paragraph identifiers, and positions from a dataset.
 
@@ -142,6 +147,9 @@ def get_all_positions(dataset, num_workers=1):
     ----------
     dataset : Path
         A path to a dataset.
+    ntcir_10_dataset : Path
+        The path of the NTCIR-10 Math dataset converted to the NTCIR-11 Math-2, and NTCIR-12 MathIR
+        format.
     num_workers : int, optional
         The number of processes that will extract paragraph positions from the dataset.
 
@@ -153,7 +161,10 @@ def get_all_positions(dataset, num_workers=1):
     """
     positions = []
     identifiers = tqdm(
-        list(get_all_identifiers(dataset)), desc="get_all_positions(%s)" % dataset.name)
+        [
+            (directory, identifier, ntcir_10_dataset)
+            for directory, identifier in get_all_identifiers(dataset)
+        ], desc="get_all_positions(%s)" % dataset.name)
     with Pool(num_workers) as pool:
         for directory, identifier, position in pool.map(_get_position_worker, identifiers):
             positions.append((directory, identifier, position))

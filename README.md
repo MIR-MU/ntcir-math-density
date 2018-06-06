@@ -23,6 +23,7 @@ Displaying the usage:
 
     $ ntcir-math-density --help
     usage: ntcir-math-density [-h] [--datasets DATASETS [DATASETS ...]]
+                              [--ntcir-10-dataset NTCIR_10_DATASET]
                               [--judgements JUDGEMENTS [JUDGEMENTS ...]]
                               [--plots PLOTS [PLOTS ...]] [--estimators ESTIMATORS]
                               [--num-workers NUM_WORKERS]
@@ -38,6 +39,11 @@ Displaying the usage:
                             label (e.g. "A=/some/path"). Note that all the
                             datasets must be in the NTCIR-11 Math-2, and NTCIR-12
                             MathIR format, even the NTCIR-10 Math dataset.
+    --ntcir-10-dataset NTCIR_10_DATASET
+                            The single-letter label of the NTCIR-10 Math dataset
+                            converted to the NTCIR-11 Math-2, and the NTCIR-12
+                            MathIR format. Each path must be prefixed with a
+                            unique single-letter label (e.g. "A=/some/path").
     --judgements JUDGEMENTS [JUDGEMENTS ...]
                             Paths to the files containing relevance judgements.
                             Each path must be prefixed with single-letter labels
@@ -65,7 +71,7 @@ Displaying the usage:
 Extracting density, and probability estimators, and plotting the estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
-    >     --datasets A=ntcir-10-converted B=ntcir-11-12 \
+    >     --datasets A=ntcir-10-converted B=ntcir-11-12 --ntcir-10-dataset A \
     >     --judgements A:NTCIR_10_Math-qrels_fs-converted.dat A:NTCIR_10_Math-qrels_ft-converted.dat \
     >                  B:NTCIR11_Math-qrels.dat B:NTCIR12_Math-qrels_agg.dat \
     >                  B:NTCIR12_Math_simto-qrels_agg.dat \
@@ -101,7 +107,7 @@ Extracting density, and probability estimators, and plotting the estimates using
 Extracting density, and probability estimators using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
-    >     --datasets A=ntcir-10-converted B=ntcir-11-12 \
+    >     --datasets A=ntcir-10-converted B=ntcir-11-12 --ntcir-10-dataset A \
     >     --judgements A:NTCIR_10_Math-qrels_fs-converted.dat A:NTCIR_10_Math-qrels_ft-converted.dat \
     >                  B:NTCIR11_Math-qrels.dat B:NTCIR12_Math-qrels_agg.dat \
     >                  B:NTCIR12_Math_simto-qrels_agg.dat \
