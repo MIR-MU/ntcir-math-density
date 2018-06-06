@@ -28,7 +28,7 @@ setup(
     """,
     entry_points={
         'console_scripts': [
-            'ntcir-math-density=ntcir_math_density:main',
+            'ntcir-math-density=ntcir_math_density.__main__:main',
         ],
     },
     keywords="ntcir math_information_retrieval",
