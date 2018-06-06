@@ -144,7 +144,7 @@ def main():
                 LOGGER.warning("%s exists", plot)
     assert args.positions.parents[0].exists() and args.positions.parents[0].is_dir(), \
         "Directory %s, where the positions are to be stored, does not exist" % \
-        args.estimators.parents[0]
+        args.positions.parents[0]
     assert args.estimators.parents[0].exists() and args.estimators.parents[0].is_dir(), \
         "Directory %s, where the estimators are to be stored, does not exist" % \
         args.estimators.parents[0]
