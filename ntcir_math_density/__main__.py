@@ -58,8 +58,8 @@ def main():
     formatter = logging.Formatter(LOG_FORMAT)
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.DEBUG)
-
     ROOT_LOGGER.addHandler(file_handler)
+
     terminal_handler = logging.StreamHandler(stdout)
     terminal_handler.setFormatter(formatter)
     terminal_handler.setLevel(logging.INFO)
