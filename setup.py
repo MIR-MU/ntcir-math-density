@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 AUTHOR = "Vit Novotny"
 HERE = path.abspath(path.dirname(__file__))
-SOURCE_URL = "https://github.com/MIR-MU/ntcir-math-converter"
+SOURCE_URL = "https://github.com/MIR-MU/ntcir-math-density"
 
 # Get the long description from the README file
 with open(path.join(HERE, "README.md"), encoding="utf-8") as f:
@@ -28,7 +28,7 @@ setup(
     """,
     entry_points={
         'console_scripts': [
-            'ntcir-math-estimator=ntcir_math_estimator:main',
+            'ntcir-math-density=ntcir_math_density:main',
         ],
     },
     keywords="ntcir math_information_retrieval",
@@ -42,12 +42,12 @@ setup(
     long_description_content_type="text/markdown",
     long_description=LONG_DESCRIPTION,
     maintainer=AUTHOR,
-    name="ntcir_math_estimator",
+    name="ntcir_math_density",
     packages=find_packages(),
     python_requires="~= 3.4",
     project_urls={
         "Source": SOURCE_URL,
     },
     url=SOURCE_URL,
-    version="0.1.0",
+    version="0.1.1",
 )
