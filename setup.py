@@ -33,6 +33,8 @@ setup(
     },
     keywords="ntcir math_information_retrieval",
     install_requires=[
+        "matplotlib ~= 2.2.2",
+        "numpy ~= 1.14.3",
         "scikit-learn ~= 0.19.1",
         "tqdm ~= 4.23.3",
     ],
