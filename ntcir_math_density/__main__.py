@@ -1,5 +1,5 @@
 """
-This is the command-line interface for the NTCIR Math density estimator package.
+This is the command-line interface for the NTCIR Math Density Estimator package.
 """
 
 from argparse import ArgumentParser
@@ -16,14 +16,15 @@ from .estimator import get_judged_identifiers, get_all_positions, get_estimators
 from .view import plot_estimates
 
 
-ESTIMATORS_PATH = Path("estimators.pkl.gz")
+ESTIMATES_PATH = Path("estimates.pkl.gz")
 LOG_PATH = Path("__main__.log")
 LOG_FORMAT = "%(asctime)s : %(levelname)s : %(message)s"
 LOGGER = getLogger(__name__)
 MIN_RELEVANT_SCORE = 2
 POSITIONS_ALL_PATH = Path("positions.pkl.gz")
 ROOT_LOGGER = getLogger()
-SAMPLING_FREQUENCY = 1000
+SAMPLING_FREQUENCY = 2**10
+SAMPLES = linspace(0, 1, SAMPLING_FREQUENCY)
 
 
 class LabelledPath(object):
@@ -75,7 +76,7 @@ def main():
     parser = ArgumentParser(
         description="""
             Use NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12 MathIR datasets to compute density, and
-            probability estimators.
+            probability estimates.
         """)
     parser.add_argument(
         "--datasets", nargs='+', required=False,
@@ -100,8 +101,8 @@ def main():
         """)
     parser.add_argument(
         "--plots", type=Path, nargs='+', help="""
-            The path to the files, where the probability estimators will plotted. When no datasets
-            are specified, the estimators file will be loaded.
+            The path to the files, where the probability estimates will plotted. When no datasets
+            are specified, the estimates file will be loaded.
         """)
     parser.add_argument(
         "--positions", type=Path, default=POSITIONS_ALL_PATH, help="""
@@ -109,9 +110,9 @@ def main():
             all datasets will be stored. Defaults to %(default)s.
         """)
     parser.add_argument(
-        "--estimators", type=Path, default=ESTIMATORS_PATH, help="""
-            The path to the file, where the density, and probability estimators will be stored. When
-            no datasets are specified, this file will be loaded to provide the estimators for
+        "--estimates", type=Path, default=ESTIMATES_PATH, help="""
+            The path to the file, where the density, and probability estimates will be stored. When
+            no datasets are specified, this file will be loaded to provide the estimates for
             plotting. Defaults to %(default)s.
         """)
     parser.add_argument(
@@ -131,30 +132,30 @@ def main():
         for _, judgement_path in args.judgements:
             assert judgement_path.exists() and judgement_path.is_file(), \
                 "Relevance judgement %s does not exist" % judgement_path
-        assert not args.estimators.exists() or args.estimators.is_file(), \
-            "File %s, where estimators are to be stored, is non-regular." % args.estimators
+        assert not args.estimates.exists() or args.estimates.is_file(), \
+            "File %s, where estimates are to be stored, is non-regular." % args.estimates
         if args.positions.exists():
             LOGGER.warning("%s exists", args.positions.name)
-        if args.estimators.exists():
-            LOGGER.warning("%s exists", args.estimators.name)
+        if args.estimates.exists():
+            LOGGER.warning("%s exists", args.estimates.name)
     if args.plots:
-        assert args.datasets or args.estimators, \
-            "Neither datasets, not a stored file with estimators was provided as a plot source"
+        assert args.datasets or args.estimates, \
+            "Neither datasets, not a stored file with estimates was provided as a plot source"
         if not args.datasets:
-            assert args.estimators.exists() and args.estimators.is_file(), \
-                "The file %s with estimators does not exist" % args.estimators
+            assert args.estimates.exists() and args.estimates.is_file(), \
+                "The file %s with estimates does not exist" % args.estimates
         for plot in args.plots:
             assert plot.parents[0].exists() and plot.parents[0].is_dir(), \
                 "Directory %s, where a plot is to be stored, does not exist" % \
-                args.estimators.parents[0]
+                plot.parents[0]
             if plot.exists():
                 LOGGER.warning("%s exists", plot)
     assert args.positions.parents[0].exists() and args.positions.parents[0].is_dir(), \
         "Directory %s, where the positions are to be stored, does not exist" % \
         args.positions.parents[0]
-    assert args.estimators.parents[0].exists() and args.estimators.parents[0].is_dir(), \
-        "Directory %s, where the estimators are to be stored, does not exist" % \
-        args.estimators.parents[0]
+    assert args.estimates.parents[0].exists() and args.estimates.parents[0].is_dir(), \
+        "Directory %s, where the estimates are to be stored, does not exist" % \
+        args.estimates.parents[0]
     assert args.num_workers > 0, "The number of workers must be non-negative"
 
     if args.datasets:
@@ -206,18 +207,18 @@ def main():
         LOGGER.info("Fitting density, and probability estimators")
         estimators = get_estimators(positions_all, positions_relevant)
 
-        LOGGER.info("Pickling %s", args.estimators.name)
-        with gzip.open(args.estimators.open("wb"), "wb") as f:
-            pickle.dump(estimators, f)
+        LOGGER.info("Computing density, and probability estimates")
+        estimates = get_estimates(estimators, SAMPLES, args.num_workers)
+
+        LOGGER.info("Pickling %s", args.estimates.name)
+        with gzip.open(args.estimates.open("wb"), "wb") as f:
+            pickle.dump(estimates, f)
     else:
-        LOGGER.info("Unpickling %s", args.estimators.name)
-        with gzip.open(args.estimators.open("rb"), "rb") as f:
-            estimators = pickle.load(f)
+        LOGGER.info("Unpickling %s", args.estimates.name)
+        with gzip.open(args.estimates.open("rb"), "rb") as f:
+            estimates = pickle.load(f)
     if args.plots:
-        LOGGER.info("Computing density, and probability estimates for a plot")
-        samples = linspace(0, 1, SAMPLING_FREQUENCY)
-        estimates = get_estimates(estimators, samples, args.num_workers)
-        figure = plot_estimates(samples, estimates)
+        figure = plot_estimates(SAMPLES, estimates)
         for plot_path in args.plots:
             LOGGER.info("Plotting %s", plot_path.name)
             figure.savefig(plot_path)

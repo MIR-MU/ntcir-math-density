@@ -1,6 +1,6 @@
 # Introduction
 NTCIR Math Density Estimator is a Python 3 command-line utility that computes
-and plots density, and probability estimators from judged datasets in the
+and plots density, and probability estimates from judged datasets in the
 [NTCIR-11 Math-2][paper:aizawaetal14-ntcir11], and [NTCIR-12
 MathIR][paper:zanibbi16-ntcir12] format. Most importantly, the package
 estimates the probability `P(relevant | position)`, where `position` is a
@@ -26,10 +26,10 @@ Displaying the usage:
                               [--ntcir-10-dataset NTCIR_10_DATASET]
                               [--judgements JUDGEMENTS [JUDGEMENTS ...]]
                               [--plots PLOTS [PLOTS ...]] [--positions POSITIONS]
-                              [--estimators ESTIMATORS] [--num-workers NUM_WORKERS]
+                              [--estimates ESTIMATES] [--num-workers NUM_WORKERS]
 
     Use NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12 MathIR datasets to compute
-    density, and probability estimators.
+    density, and probability estimates.
 
     optional arguments:
     -h, --help            show this help message and exit
@@ -54,32 +54,32 @@ Displaying the usage:
                             judgements.
     --plots PLOTS [PLOTS ...]
                             The path to the files, where the probability
-                            estimators will plotted. When no datasets are
-                            specified, the estimators file will be loaded.
+                            estimates will plotted. When no datasets are
+                            specified, the estimates file will be loaded.
     --positions POSITIONS
                             The path to the file, where the estimated positions of
                             all paragraph identifiers from all datasets will be
                             stored. Defaults to positions.pkl.gz.
-    --estimators ESTIMATORS
+    --estimates ESTIMATES
                             The path to the file, where the density, and
-                            probability estimators will be stored. When no
+                            probability estimates will be stored. When no
                             datasets are specified, this file will be loaded to
-                            provide the estimators for plotting. Defaults to
-                            estimators.pkl.gz.
+                            provide the estimates for plotting. Defaults to
+                            estimates.pkl.gz.
     --num-workers NUM_WORKERS
                             The number of processes that will be used for
                             processing the NTCIR-10 Math dataset, and for
                             computing the density, and probability estimates.
                             Defaults to 1.
 
-Extracting density, and probability estimators, and plotting the estimates using 64 worker processes:
+Extracting density, and probability estimates, and plotting the estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
     >     --datasets A=ntcir-10-converted B=ntcir-11-12 --ntcir-10-dataset A \
     >     --judgements A:NTCIR_10_Math-qrels_fs-converted.dat A:NTCIR_10_Math-qrels_ft-converted.dat \
     >                  B:NTCIR11_Math-qrels.dat B:NTCIR12_Math-qrels_agg.dat \
     >                  B:NTCIR12_Math_simto-qrels_agg.dat \
-    >     --estimators estimators.pkl.gz --positions positions.pkl.gz \
+    >     --estimates estimates.pkl.gz --positions positions.pkl.gz \
     >     --plots plot.pdf plot.svg
     Retrieving judged paragraph identifiers, and scores from NTCIR_10_Math-qrels_fs-converted.dat
     100%|█████████████████████████████████████████████████████| 2129/2129 [00:00<00:00, 334959.05it/s]
@@ -103,21 +103,21 @@ Extracting density, and probability estimators, and plotting the estimates using
     Fitting density, and probability estimators
     Fitting prior p(position) density estimator
     Fitting conditional p(position | relevant) density estimator
-    Pickling estimators.pkl.gz
     Computing density, and probability estimates for a plot
     p(position): 100%|████████████████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
     p(position|relevant): 100%|███████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
+    Pickling estimates.pkl.gz
     Plotting plot.svg
     Plotting plot.pdf
 
-Extracting density, and probability estimators using 64 worker processes:
+Extracting density, and probability estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
     >     --datasets A=ntcir-10-converted B=ntcir-11-12 --ntcir-10-dataset A \
     >     --judgements A:NTCIR_10_Math-qrels_fs-converted.dat A:NTCIR_10_Math-qrels_ft-converted.dat \
     >                  B:NTCIR11_Math-qrels.dat B:NTCIR12_Math-qrels_agg.dat \
     >                  B:NTCIR12_Math_simto-qrels_agg.dat \
-    >     --estimators estimators.pkl.gz --positions positions.pkl.gz
+    >     --estimates estimates.pkl.gz --positions positions.pkl.gz
     Retrieving judged paragraph identifiers, and scores from NTCIR_10_Math-qrels_fs-converted.dat
     100%|█████████████████████████████████████████████████████| 2129/2129 [00:00<00:00, 334959.05it/s]
     Retrieving judged paragraph identifiers, and scores from NTCIR_10_Math-qrels_ft-converted.dat
@@ -140,13 +140,13 @@ Extracting density, and probability estimators using 64 worker processes:
     Fitting density, and probability estimators
     Fitting prior p(position) density estimator
     Fitting conditional p(position | relevant) density estimator
-    Pickling estimators.pkl.gz
+    Pickling estimates.pkl.gz
 
 Plotting the estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
-    >     --estimators estimators.pkl.gz --plots plot.pdf plot.svg
-    Unpickling estimators.pkl.gz
+    >     --estimates estimates.pkl.gz --plots plot.pdf plot.svg
+    Unpickling estimates.pkl.gz
     Computing density, and probability estimates for a plot
     p(position): 100%|████████████████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
     p(position|relevant): 100%|███████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]

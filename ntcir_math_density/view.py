@@ -1,5 +1,5 @@
 """
-These are the plotting functions for the NTCIR Math density estimator package.
+These are the plotting functions for the NTCIR Math Density Estimator package.
 """
 
 import matplotlib
