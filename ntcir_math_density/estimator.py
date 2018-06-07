@@ -16,6 +16,7 @@ KERNEL = {
     "kernel": "gaussian",
     "bandwidth": 0.05,
 }
+PICKLED_POSITIONS = Path("positions.pkl.gz")
 
 
 def get_judged_identifiers(input_file):

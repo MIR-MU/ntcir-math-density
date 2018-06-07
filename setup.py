@@ -13,7 +13,7 @@ with open(path.join(HERE, "README.md"), encoding="utf-8") as f:
 setup(
     author=AUTHOR,
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: Console",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
@@ -24,7 +24,7 @@ setup(
     ],
     description="""
         The NTCIR Math Density Estimator package uses NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12
-        MathIR datasets to compute density, and probability estimators.
+        MathIR datasets to compute density, and probability estimates.
     """,
     entry_points={
         'console_scripts': [
@@ -50,5 +50,5 @@ setup(
         "Source": SOURCE_URL,
     },
     url=SOURCE_URL,
-    version="0.1.3",
+    version="0.2.0",
 )
