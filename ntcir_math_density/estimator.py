@@ -95,8 +95,8 @@ def get_paragraph_number(identifier):
     int
         The number of the paragraph.
     """
-    paragraph_number = int(identifier.split('_')[-1])
-    assert paragraph_number > 0
+    paragraph_number = int(identifier.split('_')[-1]) - 1
+    assert paragraph_number >= 0
     return paragraph_number
 
 
@@ -119,9 +119,9 @@ def get_position(directory, identifier):
     """
     paragraph_number = get_paragraph_number(identifier)
     paragraph_total = max(  # Not all paragraphs are stored, e.g. because of processing errors.
-        get_paragraph_number(get_identifier(document))
+        get_paragraph_number(get_identifier(document)) + 1
         for document in directory.iterdir())
-    assert paragraph_total >= paragraph_number and paragraph_total > 0
+    assert paragraph_total > paragraph_number and paragraph_total > 0
     position = paragraph_number / paragraph_total
     return position
 
