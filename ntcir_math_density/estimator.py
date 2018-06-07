@@ -99,9 +99,9 @@ def get_paragraph_number(directory, identifier, ntcir_10_dataset):
         The number of the paragraph.
     """
     paragraph_number = int(identifier.split('_')[-1])
-    if ntcir_10_dataset in directory.parents:  # Fixes a bug in ntcir10-math-converter 0.1.4, TODO: Remove me, and the ntcir_10_dataset parameter.
-        paragraph_number = paragraph_number + 1  # Fixes a bug in ntcir10-math-converter 0.1.4, TODO: Remove me, and the directory parameter.
-    assert paragraph_number > 0
+    if not ntcir_10_dataset in directory.parents:  # Fixes a bug in ntcir10-math-converter 0.1.4, TODO: Remove me, and the ntcir_10_dataset parameter.
+        paragraph_number = paragraph_number - 1  # Fixes a bug in ntcir10-math-converter 0.1.4, TODO: Remove me, and the directory parameter.
+    assert paragraph_number >= 0
     return paragraph_number
 
 
@@ -127,9 +127,9 @@ def get_position(directory, identifier, ntcir_10_dataset):
     """
     paragraph_number = get_paragraph_number(directory, identifier, ntcir_10_dataset)
     paragraph_total = max(  # Not all paragraphs are stored, e.g. because of processing errors.
-        get_paragraph_number(directory, get_identifier(document), ntcir_10_dataset)
+        get_paragraph_number(directory, get_identifier(document), ntcir_10_dataset) + 1
         for document in directory.iterdir())
-    assert paragraph_total >= paragraph_number and paragraph_total > 0
+    assert paragraph_total > paragraph_number and paragraph_total > 0
     position = paragraph_number / paragraph_total
     return position
 
