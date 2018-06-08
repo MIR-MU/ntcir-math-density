@@ -103,9 +103,9 @@ Extracting density, and probability estimates, and plotting the estimates using 
     Fitting density, and probability estimators
     Fitting prior p(position) density estimator
     Fitting conditional p(position | relevant) density estimator
-    Computing density, and probability estimates for a plot
+    Computing density, and probability estimates
     p(position): 100%|████████████████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
-    p(position|relevant): 100%|███████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
+    p(position | relevant): 100%|█████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
     Pickling estimates.pkl.gz
     Plotting plot.svg
     Plotting plot.pdf
@@ -140,6 +140,9 @@ Extracting density, and probability estimates using 64 worker processes:
     Fitting density, and probability estimators
     Fitting prior p(position) density estimator
     Fitting conditional p(position | relevant) density estimator
+    Computing density, and probability estimates
+    p(position): 100%|████████████████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
+    p(position | relevant): 100%|█████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
     Pickling estimates.pkl.gz
 
 Plotting the estimates using 64 worker processes:
@@ -147,8 +150,5 @@ Plotting the estimates using 64 worker processes:
     $ ntcir-math-density --num-workers 64 \
     >     --estimates estimates.pkl.gz --plots plot.pdf plot.svg
     Unpickling estimates.pkl.gz
-    Computing density, and probability estimates for a plot
-    p(position): 100%|████████████████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
-    p(position|relevant): 100%|███████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
     Plotting plot.svg
     Plotting plot.pdf
