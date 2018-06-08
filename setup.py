@@ -23,8 +23,8 @@ setup(
         "Topic :: Text Processing :: Markup :: XML",
     ],
     description="""
-        The NTCIR Math Density Estimator package uses NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12
-        MathIR datasets to compute density, and probability estimates.
+        The NTCIR Math Density Estimator package uses datasets, and judgements in the NTCIR-11
+        Math-2, and NTCIR-12 MathIR XHTML5 format to compute density, and probability estimates.
     """,
     entry_points={
         'console_scripts': [

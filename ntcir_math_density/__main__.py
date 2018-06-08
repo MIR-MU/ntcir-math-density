@@ -75,15 +75,14 @@ def main():
     LOGGER.debug("Parsing command-line arguments")
     parser = ArgumentParser(
         description="""
-            Use NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12 MathIR datasets to compute density, and
-            probability estimates.
+            Use datasets, and judgements in the NTCIR-11 Math-2, and NTCIR-12 MathIR XHTML5 format
+            to compute density, and probability estimates.
         """)
     parser.add_argument(
         "--datasets", nargs='+', required=False,
         type=lambda s: LabelledPath(s.split('=', 1)[0], Path(s.split('=', 1)[1])), help="""
             Paths to the directories containing the datasets. Each path must be prefixed with a
-            unique single-letter label (e.g. "A=/some/path"). Note that all the datasets must be in
-            the NTCIR-11 Math-2, and NTCIR-12 MathIR format, even the NTCIR-10 Math dataset.
+            unique single-letter label followed by an equals sign (e.g. "A=/some/path").
         """)
     parser.add_argument(
         "--ntcir-10-dataset", required=False, type=lambda s: LabelledPath.labels[s], help="""
@@ -94,10 +93,9 @@ def main():
     parser.add_argument(
         "--judgements", nargs='+', required=False,
         type=lambda s: (LabelledPath.labels[s.split(':', 1)[0]], Path(s.split(':', 1)[1])), help="""
-            Paths to the files containing relevance judgements. Each path must be prefixed with
-            single-letter labels corresponding to the judged datasets (e.g.
-            "A:/some/path/judgement.dat"). Note that all the judgements must be in the NTCIR-11
-            Math-2, and NTCIR-12 MathIR format, even the NTCIR-10 Math dataset judgements.
+            Paths to the files containing relevance judgements. Each path must be prefixed with a
+            single-letter label corresponding to the judged dataset followed by a semicolon (e.g.
+            "A:/some/path/judgement.dat").
         """)
     parser.add_argument(
         "--plots", type=Path, nargs='+', help="""
@@ -117,8 +115,8 @@ def main():
         """)
     parser.add_argument(
         "--num-workers", type=int, default=1, help="""
-            The number of processes that will be used for processing the NTCIR-10 Math dataset, and
-            for computing the density, and probability estimates. Defaults to %(default)d.
+            The number of processes that will be used for processing the datasets, and for computing
+            the density, and probability estimates. Defaults to %(default)d.
         """)
     args = parser.parse_args()
 

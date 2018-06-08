@@ -1,5 +1,5 @@
 """
-These are the estimator functions for the NTCIR Math density estimator package.
+These are the estimator functions for the NTCIR Math Density Estimator package.
 """
 
 from logging import getLogger
@@ -59,7 +59,8 @@ def get_identifier(document):
 
 def get_all_identifiers(dataset):
     """
-    Extracts paragraph identifiers from a dataset.
+    Extracts paragraph identifiers from a dataset in the NTCIR-11 Math-2, and NTCIR-12 MathIR XHTML5
+    format.
 
     Parameters
     ----------
@@ -141,7 +142,8 @@ def _get_position_worker(args):
 
 def get_all_positions(dataset, ntcir_10_dataset, num_workers=1):
     """
-    Extracts paragraph identifiers, and positions from a dataset.
+    Extracts paragraph identifiers, and positions from a dataset in the NTCIR-11 Math-2, and
+    NTCIR-12 MathIR XHTML5 format.
 
     Parameters
     ----------

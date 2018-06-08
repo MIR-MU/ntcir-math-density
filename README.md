@@ -1,10 +1,10 @@
 # Introduction
-NTCIR Math Density Estimator is a Python 3 command-line utility that computes
-and plots density, and probability estimates from judged datasets in the
-[NTCIR-11 Math-2][paper:aizawaetal14-ntcir11], and [NTCIR-12
-MathIR][paper:zanibbi16-ntcir12] format. Most importantly, the package
-estimates the probability `P(relevant | position)`, where `position` is a
-position of a paragraph in a document.
+NTCIR Math Density Estimator is a Python 3 command-line utility that uses
+datasets, and judgements in the [NTCIR-11 Math-2][paper:aizawaetal14-ntcir11],
+and [NTCIR-12 MathIR][paper:zanibbi16-ntcir12] XHTML5 format to compute
+density, and probability estimates. Most importantly, the package estimates the
+probability `P(relevant | position)`, where `position` is a position of a
+paragraph in a document.
 
 [paper:aizawaetal13-ntcir10]: https://ntcir-math.nii.ac.jp/wp-content/blogs.dir/23/files/2013/10/01-NTCIR10-OV-MATH-AizawaA.pdf (NTCIR-10 Math Pilot Task Overview, Proceedings of the 10th NTCIR Conference, June 18–21, 2013, Tokyo, Japan)
 [paper:aizawaetal14-ntcir11]: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.686.444&rep=rep1&type=pdf (NTCIR-11 Math-2 Task Overview, Proceedings of the 11th NTCIR Conference, December 9–12, 2014, Tokyo, Japan)
@@ -28,17 +28,15 @@ Displaying the usage:
                               [--plots PLOTS [PLOTS ...]] [--positions POSITIONS]
                               [--estimates ESTIMATES] [--num-workers NUM_WORKERS]
 
-    Use NTCIR-10 Math, NTCIR-11 Math-2, and NTCIR-12 MathIR datasets to compute
-    density, and probability estimates.
+    Use datasets, and judgements in NTCIR-11 Math-2, and NTCIR-12 MathIR XHTML5
+    format to compute density, and probability estimates.
 
     optional arguments:
     -h, --help            show this help message and exit
     --datasets DATASETS [DATASETS ...]
                             Paths to the directories containing the datasets. Each
                             path must be prefixed with a unique single-letter
-                            label (e.g. "A=/some/path"). Note that all the
-                            datasets must be in the NTCIR-11 Math-2, and NTCIR-12
-                            MathIR format, even the NTCIR-10 Math dataset.
+                            label followed by an equals sign (e.g. "A=/some/path").
     --ntcir-10-dataset NTCIR_10_DATASET
                             The single-letter label of the NTCIR-10 Math dataset
                             converted to the NTCIR-11 Math-2, and the NTCIR-12
@@ -46,12 +44,9 @@ Displaying the usage:
                             unique single-letter label (e.g. "A=/some/path").
     --judgements JUDGEMENTS [JUDGEMENTS ...]
                             Paths to the files containing relevance judgements.
-                            Each path must be prefixed with single-letter labels
-                            corresponding to the judged datasets (e.g.
-                            "A:/some/path/judgement.dat"). Note that all the
-                            judgements must be in the NTCIR-11 Math-2, and
-                            NTCIR-12 MathIR format, even the NTCIR-10 Math dataset
-                            judgements.
+                            Each path must be prefixed with a single-letter label
+                            corresponding to the judged dataset followed by a
+                            semicolon (e.g. "A:/some/path/judgement.dat").
     --plots PLOTS [PLOTS ...]
                             The path to the files, where the probability
                             estimates will plotted. When no datasets are
@@ -68,9 +63,8 @@ Displaying the usage:
                             estimates.pkl.gz.
     --num-workers NUM_WORKERS
                             The number of processes that will be used for
-                            processing the NTCIR-10 Math dataset, and for
-                            computing the density, and probability estimates.
-                            Defaults to 1.
+                            processing the datasets, and for computing the
+                            density, and probability estimates. Defaults to 1.
 
 Extracting density, and probability estimates, and plotting the estimates using 64 worker processes:
 
