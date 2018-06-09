@@ -211,7 +211,7 @@ def main():
         figure = plot_estimates(SAMPLES, estimates)
         for plot_path in args.plots:
             LOGGER.info("Plotting %s", plot_path.name)
-            figure.savefig(plot_path)
+            figure.savefig(str(plot_path))
 
 
 if __name__ == "__main__":
