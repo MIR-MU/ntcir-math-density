@@ -174,7 +174,8 @@ def main():
             identifiers_all[dataset.path] = []
             positions_all[dataset.path] = []
             positions_relevant[dataset.path] = []
-            for directory, identifier, position in get_all_positions(dataset.path, args.num_workers):
+            for directory, identifier, position in get_all_positions(
+                    dataset.path, args.num_workers):
                 identifiers_all[dataset.path].append((directory, identifier))
                 positions_all[dataset.path].append(position)
                 if identifier in identifiers_relevant[dataset.path]:

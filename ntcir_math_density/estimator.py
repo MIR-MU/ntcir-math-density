@@ -116,7 +116,7 @@ def get_position(directory, identifier):
     Returns
     -------
     float
-        The estimated position of the paragraph in the range [0; 1].
+        The estimated position of the paragraph in the range [0; 1).
     """
     paragraph_number = get_paragraph_number(identifier)
     paragraph_total = max(  # Not all paragraphs are stored, e.g. because of processing errors.
@@ -148,7 +148,7 @@ def get_all_positions(dataset, num_workers=1):
     -------
     (Path, str, float)
         A parent directory of a paragraph, the identifier of the paragraph, and an estimate of the
-        position of the paragraph in the range [0; 1].
+        position of the paragraph in its parent document. The position is in the range [0; 1).
     """
     positions = []
     identifiers = tqdm(
@@ -210,7 +210,7 @@ def get_estimates(estimators_tuple, positions, num_workers=1):
     -------
     six-tuple of (sequence of float)
         Estimates of P(relevant), p(position), p(position | relevant), P(position, relevant), and
-        P(relevant | position).
+        P(relevant | position) in the form of histograms.
     """
     estimators = dict()
     estimators["P(relevant)"], estimators["p(position)"], \

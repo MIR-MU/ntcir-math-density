@@ -4,7 +4,7 @@ These are the plotting functions for the NTCIR Math Density Estimator package.
 
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # noqa:E402
 
 
 ESTIMATE_TITLES = [
