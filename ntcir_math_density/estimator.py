@@ -208,7 +208,7 @@ def get_estimates(estimators_tuple, positions, num_workers=1):
 
     Returns
     -------
-    six-tuple of (sequence of float)
+    five-tuple of (sequence of float)
         Estimates of P(relevant), p(position), p(position | relevant), P(position, relevant), and
         P(relevant | position) in the form of histograms.
     """
