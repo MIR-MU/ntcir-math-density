@@ -50,5 +50,5 @@ setup(
         "Source": SOURCE_URL,
     },
     url=SOURCE_URL,
-    version="0.2.0",
+    version="0.2.1",
 )

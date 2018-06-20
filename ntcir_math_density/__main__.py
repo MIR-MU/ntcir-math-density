@@ -20,7 +20,7 @@ ESTIMATES_PATH = Path("estimates.pkl.gz")
 LOG_PATH = Path("__main__.log")
 LOG_FORMAT = "%(asctime)s : %(levelname)s : %(message)s"
 LOGGER = getLogger(__name__)
-MIN_RELEVANT_SCORE = 2
+MIN_RELEVANT_SCORE = 0
 POSITIONS_ALL_PATH = Path("positions.pkl.gz")
 ROOT_LOGGER = getLogger()
 SAMPLING_FREQUENCY = 2**10
@@ -162,7 +162,7 @@ def main():
             with judgement_path.open("rt") as f:
                 for identifier, score in get_judged_identifiers(f):
                     identifiers_judged[dataset_path].add(identifier)
-                    if score >= MIN_RELEVANT_SCORE:
+                    if score > MIN_RELEVANT_SCORE:
                         identifiers_relevant[dataset_path].add(identifier)
 
         identifiers_all = {}
