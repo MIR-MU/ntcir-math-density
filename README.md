@@ -1,20 +1,33 @@
+NTCIR Math Density Estimator – Estimates relevance of documents based on data from NTCIR Math tasks
+===================================================================================================
+[![CircleCI](https://circleci.com/gh/MIR-MU/ntcir-math-density/tree/master.svg?style=shield)][ci]
+
+ [ci]: https://circleci.com/gh/MIR-MU/ntcir-math-density/tree/master (CircleCI)
+
+
 # Introduction
 NTCIR Math Density Estimator is a Python 3 command-line utility that uses
-datasets, and judgements in the [NTCIR-11 Math-2][paper:aizawaetal14-ntcir11],
-and [NTCIR-12 MathIR][paper:zanibbi16-ntcir12] XHTML5 format to compute
-density, and probability estimates. Most importantly, the package estimates the
-probability `P(relevant | position)`, where `position` is a position of a
-paragraph in a document.
+datasets, and judgements in the [NTCIR-11 Math-2][aizawaetal14-ntcir11], and
+[NTCIR-12 MathIR][zanibbi16-ntcir12] XHTML5 format to compute density, and
+probability estimates. Most importantly, the package estimates the probability
+`P(relevant | position)`, where `position` is a position of a paragraph in a
+document.
 
-[paper:aizawaetal14-ntcir11]: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.686.444&rep=rep1&type=pdf (NTCIR-11 Math-2 Task Overview)
-[paper:zanibbi16-ntcir12]: https://research.nii.ac.jp/ntcir/workshop/OnlineProceedings12/pdf/ntcir/OVERVIEW/01-NTCIR12-OV-MathIR-ZanibbiR.pdf (NTCIR-12 MathIR Task Overview)
+[aizawaetal14-ntcir11]: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.686.444&rep=rep1&type=pdf (NTCIR-11 Math-2 Task Overview)
+[zanibbi16-ntcir12]: https://research.nii.ac.jp/ntcir/workshop/OnlineProceedings12/pdf/ntcir/OVERVIEW/01-NTCIR12-OV-MathIR-ZanibbiR.pdf (NTCIR-12 MathIR Task Overview)
 
-# Usage
-Installing:
+Usage
+=====
+Installing
+----------
+The package can be installed by executing the following command:
 
     $ pip install ntcir-math-density
 
-Displaying the usage:
+Displaying the usage
+--------------------
+Usage information for the package can be displayed by executing the following
+command:
 
     $ ntcir-math-density --help
     usage: ntcir-math-density [-h] [--datasets DATASETS [DATASETS ...]]
@@ -55,7 +68,10 @@ Displaying the usage:
                             processing the datasets, and for computing the
                             density, and probability estimates. Defaults to 1.
 
-Extracting density, and probability estimates, and plotting the estimates using 64 worker processes:
+Extracting estimates
+--------------------
+The following command extracts density, and probability estimates and plots the
+estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
     >     --datasets A=ntcir-10-converted B=ntcir-11-12 \
@@ -93,7 +109,7 @@ Extracting density, and probability estimates, and plotting the estimates using 
     Plotting plot.svg
     Plotting plot.pdf
 
-Extracting density, and probability estimates using 64 worker processes:
+The following command extracts density, and probability estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
     >     --datasets A=ntcir-10-converted B=ntcir-11-12 \
@@ -128,7 +144,7 @@ Extracting density, and probability estimates using 64 worker processes:
     p(position | relevant): 100%|█████████████████████████████████████| 64/64 [01:19<00:00,  1.24s/it]
     Pickling estimates.pkl.gz
 
-Plotting the estimates using 64 worker processes:
+The following command plots the estimates using 64 worker processes:
 
     $ ntcir-math-density --num-workers 64 \
     >     --estimates estimates.pkl.gz --plots plot.pdf plot.svg
