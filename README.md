@@ -4,8 +4,6 @@ NTCIR Math Density Estimator – Estimates relevance of documents based on data 
 
  [ci]: https://circleci.com/gh/MIR-MU/ntcir-math-density/tree/master (CircleCI)
 
-
-# Introduction
 NTCIR Math Density Estimator is a Python 3 command-line utility that uses
 datasets, and judgements in the [NTCIR-11 Math-2][aizawaetal14-ntcir11], and
 [NTCIR-12 MathIR][zanibbi16-ntcir12] XHTML5 format to compute density, and
